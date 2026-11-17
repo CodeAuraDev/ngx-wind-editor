@@ -1,0 +1,97 @@
+<div class="wind-shell" [style.--wind-dark-bg]="darkBackground() || null" [style.--wind-dark-border]="darkBorder() || null">
+    @if (showToolbar() && tools().length > 0) {
+        <div class="wind-toolbar" role="toolbar" aria-label="Formatting">
+            @for (tool of tools(); track tool.id) {
+                <button
+                        type="button"
+                        [class]="buttonClasses('wind-tool')"
+                        [attr.aria-label]="tool.label"
+                        [attr.title]="tool.label"
+                        [attr.aria-pressed]="pressed(tool.id)"
+                        [disabled]="toolDisabled(tool.id)"
+                        (mousedown)="$event.preventDefault()"
+                        (click)="run(tool.id)"
+                >
+                    @if (tool.id === 'paragraph' || tool.id === 'h1' || tool.id === 'h2') {
+                        <span class="wind-tool-label">{{ tool.id === 'paragraph' ? 'P' : tool.id.toUpperCase() }}</span>
+                    } @else {
+                        <wind-icon [name]="tool.icon" />
+                    }
+                </button>
+            }
+        </div>
+    }
+
+    @if (linkOpen()) {
+        <form class="wind-pop" (submit)="applyLink($event)">
+            <label class="wind-sr" for="wind-link">Link URL</label>
+            <input
+                    id="wind-link"
+                    class="wind-field"
+                    [value]="linkDraft()"
+                    placeholder="https://"
+                    (input)="onDraft($event, 'link')"
+            />
+            <button type="submit" [class]="buttonClasses('wind-primary')">Apply</button>
+            <button type="button" class="wind-quiet" (click)="clearLink()">Remove</button>
+        </form>
+    }
+
+    @if (imageOpen()) {
+        <form class="wind-pop" (submit)="applyImage($event)">
+            <input class="wind-field" [value]="imageSrc()" placeholder="Image URL" (input)="onDraft($event, 'src')" />
+            <input class="wind-field wind-field-short" [value]="imageAlt()" placeholder="Alt text" (input)="onDraft($event, 'alt')" />
+            <button type="submit" [class]="buttonClasses('wind-primary')">Insert</button>
+        </form>
+    }
+
+    <div class="wind-surface" #surface [style.--wind-max-height]="maxHeight()"></div>
+
+    @if (slashItems().length > 0 && change()?.slashRect; as rect) {
+        <ul
+                class="wind-menu"
+                role="listbox"
+                [style.top.px]="rect.top"
+                [style.left.px]="rect.left"
+        >
+            @for (item of slashItems(); track item.id; let index = $index) {
+                <li>
+                    <button
+                            type="button"
+                            class="wind-option"
+                            [class.is-active]="index === slashIndex()"
+                            role="option"
+                            [attr.aria-selected]="index === slashIndex()"
+                            (mousedown)="$event.preventDefault()"
+                            (click)="pickSlash(item)"
+                    >
+                        <span>{{ item.label }}</span>
+                        <span class="wind-option-hint">{{ item.hint }}</span>
+                    </button>
+                </li>
+            }
+        </ul>
+    }
+
+    <footer class="wind-meta">
+        <span>{{ change()?.words ?? 0 }} words</span>
+        <span class="wind-meta-hint">/ for blocks</span>
+    </footer>
+
+    @if (showError() && errorText()) {
+        <p class="wind-error" role="alert">{{ errorText() }}</p>
+    }
+
+    @if (sourceOpen()) {
+        <div class="wind-source">
+          <textarea
+                  class="wind-source-input"
+                  [value]="sourceDraft()"
+                  spellcheck="false"
+                  aria-label="HTML source"
+                  (input)="onDraft($event, 'source')"
+          ></textarea>
+            <button type="button" [class]="buttonClasses('wind-primary')" (click)="applySource()">Apply HTML</button>
+        </div>
+    }
+</div>

@@ -1,0 +1,57 @@
+{
+  "name": "@codeauradev/ngx-wind-editor",
+  "version": "1.0.13",
+  "description": "WYSIWYG HTML editor for Angular 22, styled with Tailwind CSS v4.",
+  "repository": "https://github.com/CodeAuraDev/ngx-wind-editor",
+  "keywords": [
+    "angular",
+    "angular22",
+    "wysiwyg",
+    "rich-text",
+    "editor",
+    "tailwindcss",
+    "ngx"
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": [
+    "*.css",
+    "styles.css"
+  ],
+  "type": "module",
+  "main": "./dist/fesm2022/codeauradev-ngx-wind-editor.mjs",
+  "module": "./dist/fesm2022/codeauradev-ngx-wind-editor.mjs",
+  "types": "./dist/types/codeauradev-ngx-wind-editor.d.ts",
+  "typings": "./dist/types/codeauradev-ngx-wind-editor.d.ts",
+  "peerDependencies": {
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
+    "tailwindcss": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@angular/compiler": "22.2.3",
+    "@angular/compiler-cli": "22.2.3",
+    "@angular/core": "22.2.3",
+    "@angular/forms": "22.2.3",
+    "ng-packagr": "22.2.3",
+    "prettier": "^3.10.1",
+    "rxjs": "7.8.2",
+    "tsx": "^4.20.5",
+    "typescript": "6.0.3",
+    "yjs": "13.6.27"
+  },
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json -c tsconfig.json && node scripts/bundle-yjs.mjs && node scripts/patch-dist.mjs",
+    "test": "tsx --test test/*.test.ts"
+  }
+}
